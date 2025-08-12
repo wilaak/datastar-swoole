@@ -14,7 +14,13 @@ First you must install the Swoole PHP extension. Please refer to the [documentat
 
 ## Usage Examples
 
+In Swoole, each request is put in its own [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to write PHP code in a standard blocking way.
+
 ```PHP
+
+// After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous I.
+\Swoole\Runtime::enableCoroutine();
+
 $http = new \Swoole\Http\Server("0.0.0.0", 8082);
 
 $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
