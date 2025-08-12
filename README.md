@@ -4,11 +4,11 @@ This package provides an SDK for using [Datastar](https://data-star.dev) with [S
 
 ## Installation
 
-    composer require wilaak/datastar-php-swoole
+    composer require wilaak/datastar-swoolephp
 
 ## Usage Examples
 
-In the SwoolePHP HTTP Server each request is put in a [coroutine](https://wiki.swoole.com/en/#/start/coroutine), allowing you to use standard blocking PHP code without troubles.
+In the SwoolePHP HTTP Server each request is put in a [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to use standard blocking PHP code without troubles.
 
 ```PHP
 use Swoole\Http\Server;
