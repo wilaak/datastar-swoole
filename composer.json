@@ -13,10 +13,11 @@
             "Wilaak\\DatastarSwoole\\": "src/"
         }
     },
+    "minimum-stability": "RC",
     "support": {
-        "docs": "https://github.com/Wilaak/DatastarSwoolePHP",
-        "source": "https://github.com/Wilaak/DatastarSwoolePHP",
-        "issues": "https://github.com/Wilaak/DatastarSwoolePHP/issues"
+        "docs": "https://github.com/Wilaak/DatastarSwoole",
+        "source": "https://github.com/Wilaak/DatastarSwoole",
+        "issues": "https://github.com/Wilaak/DatastarSwoole/issues"
     },
     "authors": [
         {
