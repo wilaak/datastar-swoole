@@ -2,8 +2,6 @@
 
 This package provides an SDK for using [Datastar](https://data-star.dev) with [SwoolePHP](https://wiki.swoole.com/en/).
 
-SwoolePHP allows you to build efficient, high-concurrency applications.
-
 ## Installation
 
     composer require wilaak/datastar-php-swoole
