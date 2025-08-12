@@ -40,7 +40,7 @@ $http = new \Swoole\Http\Server("0.0.0.0", 8082);
 $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
 
     // Creates a new `SSE` instance.
-    $sse = new Wilaak\DatastarSwoole\SSE($request, $response);
+    $sse = new \Wilaak\DatastarSwoole\SSE($request, $response);
 
     // Reads signals from the request.
     $signals = $sse->readSignals();
