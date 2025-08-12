@@ -1,6 +1,8 @@
-# Datastar PHP Swoole SDK
+# Datastar SDK for Swoole PHP
 
-This package provides an SDK for using [Datastar](https://data-star.dev) with [SwoolePHP](https://wiki.swoole.com/en/).
+This package provides an SDK for using [Datastar](https://data-star.dev) with [Swoole](https://wiki.swoole.com/en/). Swoole allows you to build efficient high-concurrency applications using PHP.
+
+Typical PHP SAPI servers (such as Apache with mod_php or PHP-FPM) are very inefficient at keeping many connections open, making them unsuitable for real-time or long-lived connection scenarios. Swoole overcomes this limitation by enabling asynchronous, coroutine-based handling of requests, allowing your application to efficiently manage thousands of simultaneous connections.
 
 ## Installation
 
@@ -8,7 +10,7 @@ This package provides an SDK for using [Datastar](https://data-star.dev) with [S
 
 ## Usage Examples
 
-In the SwoolePHP HTTP Server each request is put in a [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to use standard blocking PHP code without troubles.
+In Swoole, each request is put in its own [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to write PHP code in a standard blocking way.
 
 ```PHP
 use Swoole\Http\Server;
