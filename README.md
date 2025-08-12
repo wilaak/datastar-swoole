@@ -8,6 +8,8 @@ Swoole’s asynchronous, coroutine-driven architecture allows your application t
 
 ## Installation
 
+First you must install the Swoole PHP extension. Please refer to the [documentation](https://wiki.swoole.com/en/#/environment?id=pecl).
+
     composer require wilaak/datastar-swoole
 
 ## Usage Examples
