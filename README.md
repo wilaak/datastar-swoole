@@ -14,8 +14,6 @@ First you must install the Swoole PHP extension. Please refer to the [documentat
 
 ## Usage Examples
 
-In Swoole, each request is put in its own [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to write PHP code in a standard blocking way.
-
 ```PHP
 $http = new \Swoole\Http\Server("0.0.0.0", 8082);
 
@@ -25,7 +23,7 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
     $message = "Hello, World!";
     foreach (str_split($message) as $i => $char) {
         $sse->patchElements("<h3 id='message'>" . substr($message, 0, $i + 1) . "</h3>");
-        sleep(1);
+        co::sleep(1);
     }
 });
 
