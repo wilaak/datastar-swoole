@@ -1,27 +1,24 @@
 # Datastar SDK for Swoole PHP
 
-This package provides an SDK for using [Datastar](https://data-star.dev) with [Swoole](https://wiki.swoole.com/en/). Swoole allows you to build efficient high-concurrency applications using PHP.
+This package offers an SDK for integrating [Datastar](https://data-star.dev) with [Swoole](https://wiki.swoole.com/en/#/).
 
-Typical PHP SAPI servers (such as Apache with mod_php or PHP-FPM) are very inefficient at keeping many connections open, making them unsuitable for real-time or long-lived connection scenarios. Swoole overcomes this limitation by enabling asynchronous, coroutine-based handling of requests, allowing your application to efficiently manage thousands of simultaneous connections.
+Traditional PHP SAPI servers such as Apache, PHP-FPM or FrankenPHP struggle with efficiently handling large numbers of concurrent long-lived requests.
+
+Swoole’s asynchronous, coroutine-driven architecture allows your application to efficiently manage thousands of simultaneous long-lived connections.
 
 ## Installation
 
-    composer require wilaak/datastar-swoolephp
+    composer require wilaak/datastar-swoole
 
 ## Usage Examples
 
 In Swoole, each request is put in its own [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to write PHP code in a standard blocking way.
 
 ```PHP
-use Swoole\Http\Server;
-use Swoole\Http\Request;
-use Swoole\Http\Response;
-use Wilaak\Datastar\Swoole\ServerSentEventGenerator;
+$http = new \Swoole\Http\Server("0.0.0.0", 8082);
 
-$http = new Server("0.0.0.0", 8082);
-
-$http->on('request', function (Request $request, Response $response) {
-    $sse = new ServerSentEventGenerator($request, $response);
+$http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
+    $sse = new \Wilaak\DatastarSwoole\SSE($request, $response);
 
     $message = "Hello, World!";
     foreach (str_split($message) as $i => $char) {
@@ -34,17 +31,14 @@ $http->start();
 ```
 
 ```php
-use Swoole\Http\Request;
-use Swoole\Http\Response;
-use Swoole\Http\Server;
-use Wilaak\Datastar\Swoole\ServerSentEventGenerator;
 use starfederation\datastar\enums\ElementPatchMode;
 
-$http = new Server("0.0.0.0", 8082);
+$http = new \Swoole\Http\Server("0.0.0.0", 8082);
 
-$http->on('request', function (Request $request, Response $response) {
-    // Creates a new `ServerSentEventGenerator` instance.
-    $sse = new ServerSentEventGenerator($request, $response);
+$http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
+
+    // Creates a new `SSE` instance.
+    $sse = new Wilaak\DatastarSwoole\SSE($request, $response);
 
     // Reads signals from the request.
     $signals = $sse->readSignals();

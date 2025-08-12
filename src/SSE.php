@@ -1,6 +1,6 @@
 <?php
 
-namespace Wilaak\Datastar\Swoole;
+namespace Wilaak\DatastarSwoole;
 
 use starfederation\datastar\enums\ElementPatchMode;
 use starfederation\datastar\events\EventInterface;
@@ -11,10 +11,22 @@ use starfederation\datastar\events\PatchSignals;
 use starfederation\datastar\events\RemoveElements;
 use starfederation\datastar\Consts;
 
-class ServerSentEventGenerator
+/**
+ * Server-Sent Event (SSE) generator for Datastar Swoole.
+ */
+class SSE
 {
+    /**
+     * Whether the response headers have been sent.
+     */
     public bool $headersSent = false;
 
+    /**
+     * Constructor for the SSE generator.
+     *
+     * @param \Swoole\Http\Request $request The Swoole HTTP request object.
+     * @param \Swoole\Http\Response $response The Swoole HTTP response object.
+     */
     public function __construct(
         private \Swoole\Http\Request $request,
         private \Swoole\Http\Response $response
@@ -26,9 +38,9 @@ class ServerSentEventGenerator
     public function readSignals(): array
     {
         $input = $this->request->get[Consts::DATASTAR_KEY] ?? $this->request->rawContent();
-        $signals = $input ? json_decode($input, true) : [];
+        $signals = $input ? \json_decode($input, true) : [];
 
-        return is_array($signals) ? $signals : [];
+        return \is_array($signals) ? $signals : [];
     }
 
     /**
