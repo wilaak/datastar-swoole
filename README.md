@@ -28,7 +28,7 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
     $message = "Hello, World!";
     foreach (str_split($message) as $i => $char) {
         $sse->patchElements("<h3 id='message'>" . substr($message, 0, $i + 1) . "</h3>");
-        co::sleep(1);
+        sleep(1);
     }
 });
 
