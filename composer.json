@@ -1,0 +1,26 @@
+{
+    "description": "SDK for using Datastar with SwoolePHP",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "starfederation/datastar-php": "1.0.0-RC.3",
+        "swoole/ide-helper": "^6.0",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wilaak\\Datastar\\Swoole\\": "src/"
+        }
+    },
+    "support": {
+        "docs": "https://github.com/Wilaak/datastar-php-swoole",
+        "source": "https://github.com/Wilaak/datastar-php-swoole",
+        "issues": "https://github.com/Wilaak/datastar-php-swoole/issues"
+    },
+    "authors": [
+        {
+            "name": "Wilaak",
+            "email": "54738571+Wilaak@users.noreply.github.com"
+        }
+    ]
+}
