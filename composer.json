@@ -1,6 +1,6 @@
 {
     "name": "wilaak/datastar-php-swoole",
-    "description": "SDK for using Datastar with SwoolePHP",
+    "description": "Datastar SDK for SwoolePHP",
     "type": "library",
     "license": "MIT",
     "require": {
