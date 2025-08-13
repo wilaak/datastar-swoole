@@ -49,8 +49,8 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
     $sse = new \Wilaak\DatastarSwoole\SSE($request, $response);
     while (true) {
         $sse->patchElements("<h3 id='message'>" . time() . "</h3>");
-        $disconnected = $response->write('ping: hello');
-        if ($disconnected) {
+        $success = $response->write('ping: hello');
+        if ($success === false) {
             break;
         }
         sleep(1);
