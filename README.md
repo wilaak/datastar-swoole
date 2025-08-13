@@ -1,6 +1,6 @@
 # Datastar SDK for Swoole PHP
 
-This package offers an SDK for integrating [Datastar](https://data-star.dev) with [Swoole](https://wiki.swoole.com/en/#/).
+This package offers an SDK for integrating [Datastar](https://data-star.dev) with [Swoole](https://wiki.swoole.com/en/#/). It is a simple "wrapper" of the official [PHP SDK](https://github.com/starfederation/datastar-php).
 
 Traditional PHP SAPI servers such as Apache, PHP-FPM or FrankenPHP struggle with efficiently handling large numbers of concurrent long-lived requests.
 
@@ -16,8 +16,10 @@ First you must install the Swoole PHP extension. Please refer to the [documentat
 
 In Swoole, each request is put in its own [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to write PHP code in a standard blocking way.
 
+> **Note:** To ensure proper behavior of built-in functions, you must enable coroutine hooks. This is achieved by calling `\Swoole\Runtime::enableCoroutine()` at the start of your program.
+
 ```PHP
-// After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous I.
+// After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous IO.
 \Swoole\Runtime::enableCoroutine();
 
 $http = new \Swoole\Http\Server("0.0.0.0", 8082);
@@ -35,8 +37,36 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
 $http->start();
 ```
 
+> **Note:** When in a long-running request, it's important to close the connection once the user disconnects so as to not keep running forever:
+
+```PHP
+// After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous IO.
+\Swoole\Runtime::enableCoroutine();
+
+$http = new \Swoole\Http\Server("0.0.0.0", 8082);
+
+$http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
+    $sse = new \Wilaak\DatastarSwoole\SSE($request, $response);
+    while (true) {
+        $sse->patchElements("<h3 id='message'>" . time() . "</h3>");
+        $disconnected = $response->write('ping: hello');
+        if ($disconnected) {
+            break;
+        }
+        sleep(1);
+    }
+});
+
+$http->start();
+```
+
+This example covers most of the usage possible with this SDK:
+
 ```php
 use starfederation\datastar\enums\ElementPatchMode;
+
+// After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous IO.
+\Swoole\Runtime::enableCoroutine();
 
 $http = new \Swoole\Http\Server("0.0.0.0", 8082);
 
