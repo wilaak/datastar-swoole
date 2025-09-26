@@ -16,17 +16,21 @@ First you must install the Swoole PHP extension. Please refer to the [documentat
 
 In Swoole, each request is put in its own [coroutine](https://wiki.swoole.com/en/#/coroutine), allowing you to write PHP code in a standard blocking way.
 
-> [!TIP]    
+> [!NOTE]    
 > To ensure proper behavior of built-in functions, you must enable coroutine hooks. This is achieved by calling `\Swoole\Runtime::enableCoroutine()` at the start of your program.
 
 ```PHP
+use Swoole\Http\{Server, Request, Response};
+use Swoole\Runtime;
+use DatastarSwoole\{SSE, ElementPatchMode};
+
 // After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous IO.
-\Swoole\Runtime::enableCoroutine();
+Runtime::enableCoroutine();
 
-$http = new \Swoole\Http\Server("0.0.0.0", 8082);
+$http = new Server("0.0.0.0", 8082);
 
-$http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-    $sse = new \Wilaak\DatastarSwoole\SSE($request, $response);
+$http->on('request', function (Request $req, Response $res) {
+    $sse = new DatastarSwoole\SSE($req, $res);
 
     $message = "Hello, World!";
     foreach (str_split($message) as $i => $char) {
@@ -42,8 +46,8 @@ $http->start();
 > When in a long-running request, it's important to close the connection once the user disconnects so as to not keep running forever:
 
 ```PHP
-$http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-    $sse = new \Wilaak\DatastarSwoole\SSE($request, $response);
+$http->on('request', function (Request $req, Response $res) {
+    $sse = new DatastarSwoole\SSE($req, $res);
     while (true) {
         $sse->patchElements("<h3 id='message'>" . time() . "</h3>");
         $success = $response->write('ping: hello');
@@ -58,10 +62,14 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
 This example covers most of the usage possible with this SDK:
 
 ```php
-use Swoole\Http\{Request, Response};
+use Swoole\Http\{Server, Request, Response};
+use Swoole\Runtime;
 use DatastarSwoole\{SSE, ElementPatchMode};
 
-$http = new Swoole\Http\Server("0.0.0.0", 8082);
+// After this line of code, file operations, sleep, Mysqli, PDO, streams, etc., all become asynchronous IO.
+Runtime::enableCoroutine();
+
+$http = new Server("0.0.0.0", 8082);
 
 $http->on('request', function (Request $request, Response $response) {
 
