@@ -1,10 +1,14 @@
+
+<p align="center"><img width="150" height="150" src="https://data-star.dev/static/images/rocket-512x512.png"></p>
+
 # Datastar SDK for Swoole PHP
 
-This package offers an SDK for integrating [Datastar](https://data-star.dev) with [Swoole](https://wiki.swoole.com/en/#/). It is a simple "wrapper" of the official [PHP SDK](https://github.com/starfederation/datastar-php).
 
-Traditional PHP SAPI servers (like Apache, PHP-FPM, or FrankenPHP) struggle to efficiently handle large numbers of concurrent, long-lived requests.
+This package offers an SDK for working with [Datastar](https://data-star.dev) in [Swoole](https://wiki.swoole.com/en/#/). It is a simple wrapper of the [Official PHP SDK](https://github.com/starfederation/datastar-php).
 
-Swoole’s asynchronous, coroutine-driven architecture enables your application to manage thousands of simultaneous long-lived connections with high efficiency.
+### Why Swoole?
+
+Traditional PHP SAPI servers (like Apache, PHP-FPM, or FrankenPHP) struggle to efficiently handle large numbers of concurrent, long-lived requests. Swoole’s asynchronous, coroutine-driven architecture enables your application to manage thousands of simultaneous long-lived connections with high efficiency.
 
 ## Installation
 
@@ -30,7 +34,7 @@ Runtime::enableCoroutine();
 $http = new Server("0.0.0.0", 8082);
 
 $http->on('request', function (Request $req, Response $res) {
-    $sse = new DatastarSwoole\SSE($req, $res);
+    $sse = new SSE($req, $res);
 
     $message = "Hello, World!";
     foreach (str_split($message) as $i => $char) {
@@ -47,7 +51,7 @@ $http->start();
 
 ```PHP
 $http->on('request', function (Request $req, Response $res) {
-    $sse = new DatastarSwoole\SSE($req, $res);
+    $sse = new SSE($req, $res);
     while (true) {
         $sse->patchElements("<h3 id='message'>" . time() . "</h3>");
         $success = $response->write('ping: hello');
