@@ -10,19 +10,19 @@
     },
     "autoload": {
         "psr-4": {
-            "Wilaak\\DatastarSwoole\\": "src/"
+            "DatastarSwoole\\": "src/"
         }
     },
     "minimum-stability": "RC",
     "support": {
-        "docs": "https://github.com/Wilaak/DatastarSwoole",
-        "source": "https://github.com/Wilaak/DatastarSwoole",
-        "issues": "https://github.com/Wilaak/DatastarSwoole/issues"
+        "docs": "https://github.com/wilaak/datastar-swoole",
+        "source": "https://github.com/wilaak/datastar-swoole",
+        "issues": "https://github.com/wilaak/datastar-swoole/issues"
     },
     "authors": [
         {
-            "name": "Wilaak",
-            "email": "54738571+Wilaak@users.noreply.github.com"
+            "name": "wilaak",
+            "email": "54738571+wilaak@users.noreply.github.com"
         }
     ]
 }

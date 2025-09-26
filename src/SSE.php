@@ -1,15 +1,22 @@
 <?php
 
-namespace Wilaak\DatastarSwoole;
+namespace DatastarSwoole;
 
-use starfederation\datastar\enums\ElementPatchMode;
-use starfederation\datastar\events\EventInterface;
-use starfederation\datastar\events\ExecuteScript;
-use starfederation\datastar\events\Location;
-use starfederation\datastar\events\PatchElements;
-use starfederation\datastar\events\PatchSignals;
-use starfederation\datastar\events\RemoveElements;
+use starfederation\datastar\enums\ElementPatchMode as OriginalElementPatchMode;
+
+use starfederation\datastar\events\{
+    EventInterface,
+    ExecuteScript,
+    Location,
+    PatchElements,
+    PatchSignals,
+    RemoveElements,
+};
+
 use starfederation\datastar\Consts;
+
+use Swoole\Http\Request;
+use Swoole\Http\Response;
 
 /**
  * Server-Sent Event (SSE) generator for Datastar Swoole.
@@ -24,13 +31,14 @@ class SSE
     /**
      * Constructor for the SSE generator.
      *
-     * @param \Swoole\Http\Request $request The Swoole HTTP request object.
-     * @param \Swoole\Http\Response $response The Swoole HTTP response object.
+     * @param Request $request The Swoole HTTP request object.
+     * @param Response $response The Swoole HTTP response object.
      */
     public function __construct(
-        private \Swoole\Http\Request $request,
-        private \Swoole\Http\Response $response
-    ) {}
+        private Request $request,
+        private Response $response
+    ) {
+    }
 
     /**
      * Returns the signals sent in the incoming request.
@@ -62,7 +70,7 @@ class SSE
 
         // Connection-specific headers are only allowed in HTTP/1.1.
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection
-        $proto = $this->request->server['server_protocol'] ?? 'HTTP/1.1';
+        $proto = $this->request->server['server_protocol'] ?? null;
         if ($proto === 'HTTP/1.1') {
             $headers['Connection'] = 'keep-alive';
         }
@@ -86,6 +94,12 @@ class SSE
      */
     public function patchElements(string $elements, array $options = []): string
     {
+        $mode = $options['mode'] ?? null;
+
+        if ($mode) {
+            $options['mode'] = $this->convertPatchModeEnum($mode);
+        }
+
         return $this->sendEvent(new PatchElements($elements, $options));
     }
 
@@ -137,5 +151,19 @@ class SSE
         $output = $event->getOutput();
         $this->response->write($output);
         return $output;
+    }
+
+    protected function convertPatchModeEnum(ElementPatchMode $mode): OriginalElementPatchMode
+    {
+        return match ($mode) {
+            ElementPatchMode::Outer => OriginalElementPatchMode::Outer,
+            ElementPatchMode::Inner => OriginalElementPatchMode::Inner,
+            ElementPatchMode::Remove => OriginalElementPatchMode::Remove,
+            ElementPatchMode::Replace => OriginalElementPatchMode::Replace,
+            ElementPatchMode::Prepend => OriginalElementPatchMode::Prepend,
+            ElementPatchMode::Append => OriginalElementPatchMode::Append,
+            ElementPatchMode::Before => OriginalElementPatchMode::Before,
+            ElementPatchMode::After => OriginalElementPatchMode::After,
+        };
     }
 }
