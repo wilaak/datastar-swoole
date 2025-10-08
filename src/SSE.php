@@ -78,6 +78,8 @@ class SSE
         foreach ($headers as $name => $value) {
             $this->response->header($name, $value);
         }
+
+        $this->response->write(":\n\n");
         $this->headersSent = true;
     }
 
