@@ -26,7 +26,7 @@ class SSE
     /**
      * Whether the response headers have been sent.
      */
-    public bool $headersSent = false;
+    public bool $sentHeaders = false;
 
     /**
      * Constructor for the SSE generator.
@@ -37,8 +37,7 @@ class SSE
     public function __construct(
         private Request $request,
         private Response $response
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the signals sent in the incoming request.
@@ -56,7 +55,7 @@ class SSE
      */
     public function sendHeaders(): void
     {
-        if ($this->headersSent) {
+        if ($this->sentHeaders) {
             return;
         }
 
@@ -79,8 +78,9 @@ class SSE
             $this->response->header($name, $value);
         }
 
+        // Initial SSE data to establish the stream.
         $this->response->write(":\n\n");
-        $this->headersSent = true;
+        $this->sentHeaders = true;
     }
 
     /**
@@ -99,7 +99,7 @@ class SSE
         $mode = $options['mode'] ?? null;
 
         if ($mode) {
-            $options['mode'] = $this->convertPatchModeEnum($mode);
+            $options['mode'] = OriginalElementPatchMode::from($mode->value);
         }
 
         return $this->sendEvent(new PatchElements($elements, $options));
@@ -147,25 +147,11 @@ class SSE
      */
     protected function sendEvent(EventInterface $event): string
     {
-        if (!$this->headersSent) {
+        if (!$this->sentHeaders) {
             $this->sendHeaders();
         }
         $output = $event->getOutput();
         $this->response->write($output);
         return $output;
-    }
-
-    protected function convertPatchModeEnum(ElementPatchMode $mode): OriginalElementPatchMode
-    {
-        return match ($mode) {
-            ElementPatchMode::Outer => OriginalElementPatchMode::Outer,
-            ElementPatchMode::Inner => OriginalElementPatchMode::Inner,
-            ElementPatchMode::Remove => OriginalElementPatchMode::Remove,
-            ElementPatchMode::Replace => OriginalElementPatchMode::Replace,
-            ElementPatchMode::Prepend => OriginalElementPatchMode::Prepend,
-            ElementPatchMode::Append => OriginalElementPatchMode::Append,
-            ElementPatchMode::Before => OriginalElementPatchMode::Before,
-            ElementPatchMode::After => OriginalElementPatchMode::After,
-        };
     }
 }
