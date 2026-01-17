@@ -6,10 +6,6 @@
 
 This package offers an SDK for working with [Datastar](https://data-star.dev) in [Swoole](https://wiki.swoole.com/en/#/). It is a simple wrapper of the [Official PHP SDK](https://github.com/starfederation/datastar-php).
 
-### Why Swoole?
-
-Traditional PHP SAPI servers (like Apache, PHP-FPM, or FrankenPHP) struggle to efficiently handle large numbers of concurrent, long-lived requests. Swoole’s asynchronous, coroutine-driven architecture enables your application to manage thousands of simultaneous long-lived connections with high efficiency.
-
 ## Installation
 
 First you must install the Swoole PHP extension. Please refer to the [documentation](https://wiki.swoole.com/en/#/environment?id=pecl).
